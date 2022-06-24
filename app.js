@@ -1,5 +1,6 @@
 const searchForm = document.querySelector('#search');
 const searchInput = document.querySelector('input');
+const results = document.querySelector('#results');
 
 searchForm.addEventListener('submit', async (e) => {
 	e.preventDefault();
@@ -8,10 +9,10 @@ searchForm.addEventListener('submit', async (e) => {
 	movies.forEach((movie) => {
 		const movieName = movie.name.toLowerCase();
 		if (movieName.includes(search)) {
-			console.log(movie);
+			createImage(movie);
 		}
 	});
-	console.log('helloe');
+	searchInput.value = '';
 });
 
 const getMovies = async () => {
@@ -26,4 +27,6 @@ const getMovies = async () => {
 
 const createImage = (movie) => {
 	const image = document.createElement('img');
+	image.src = movie.image.medium;
+	results.appendChild(image);
 };
