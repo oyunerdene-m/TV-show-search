@@ -4,22 +4,22 @@ const results = document.querySelector('#results');
 
 searchForm.addEventListener('submit', async (e) => {
 	e.preventDefault();
-	const movies = await getMovies();
-	const search = searchInput.value.toLowerCase();
+	const searchTerm = searchForm.elements.query.value.toLowerCase();
+	const movies = await getMovies(searchTerm);
+	console.log(movies);
 	movies.forEach((movie) => {
-		const movieName = movie.name.toLowerCase();
-		if (movieName.includes(search)) {
+		if (movie.show.image) {
 			createImage(movie);
 		}
 	});
 	searchInput.value = '';
 });
 
-const getMovies = async () => {
+const getMovies = async (query) => {
 	try {
-		const res = await axios.get('https://api.tvmaze.com/shows');
-		const movies = res.data;
-		return movies;
+		const config = { params: { q: query } };
+		const res = await axios.get('https://api.tvmaze.com/search/shows', config);
+		return res.data;
 	} catch (error) {
 		console.log('error: ', error);
 	}
@@ -27,6 +27,6 @@ const getMovies = async () => {
 
 const createImage = (movie) => {
 	const image = document.createElement('img');
-	image.src = movie.image.medium;
+	image.src = movie.show.image.medium;
 	results.appendChild(image);
 };
